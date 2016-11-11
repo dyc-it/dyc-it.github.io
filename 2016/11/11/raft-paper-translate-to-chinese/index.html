@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Raft论文翻译 | TRACING</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="简单翻译了一下Diego Ongaro和John Ousterhout的论文《In Search of an Understandable Consensus Algorithm(Extended Version)》原文地址">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Raft论文翻译">
+<meta property="og:url" content="http://yoursite.com/2016/11/11/raft-paper-translate-to-chinese/index.html">
+<meta property="og:site_name" content="TRACING">
+<meta property="og:description" content="简单翻译了一下Diego Ongaro和John Ousterhout的论文《In Search of an Understandable Consensus Algorithm(Extended Version)》原文地址">
+<meta property="og:updated_time" content="2016-11-11T10:22:08.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Raft论文翻译">
+<meta name="twitter:description" content="简单翻译了一下Diego Ongaro和John Ousterhout的论文《In Search of an Understandable Consensus Algorithm(Extended Version)》原文地址">
+  
+    <link rel="alternate" href="/atom.xml" title="TRACING" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">TRACING</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-raft-paper-translate-to-chinese" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/11/11/raft-paper-translate-to-chinese/" class="article-date">
+  <time datetime="2016-11-11T07:53:05.000Z" itemprop="datePublished">2016-11-11</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/translate/">translate</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Raft论文翻译
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>简单翻译了一下Diego Ongaro和John Ousterhout的论文《In Search of an Understandable Consensus Algorithm(Extended Version)》<br><a href="https://raft.github.io/raft.pdf" target="_blank" rel="external">原文地址</a></p>
+<a id="more"></a>
+<h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p>&emsp;&emsp;&emsp;&emsp;Raft是一种管理复制日志的一致性算法。Raft产生的结果和Paxos或者multi-Paxos是一样的，并且Raft和Paxos一样高效，但是Raft的结构和Paxos是不一样的；这样让Raft比Paxos更容易理解并且为构建使用系统提供了更好的基础。为了增强可理解性，Raft分离了一致性算法的关键要素，比如leader选举，日志复制和安全性，并强制强一致性来减少必须要被考虑的状态。用户的研究结果表明，对学生来说，Raft比Paxos更容易学习。Raft也包括改变集群成员的新机制：使用重叠大多数成员保证安全性。</p>
+<h1 id="1-介绍"><a href="#1-介绍" class="headerlink" title="1 介绍"></a>1 介绍</h1><p>&emsp;&emsp;&emsp;&emsp;一致性算法可以让一批机器作为一个相关的组，这样即使组里面有机器故障，但是整个组仍然能够对外提供服务。因为这样，一致性算法在构建一个可靠的大规模软件系统中扮演者关键角色。在过去十年中，Paxos算法在一致性算法的讨论中一直占主导地位。大多数一致性算法的实现都基于Paxos算法或者受其影响，并且Paxos已经作为教学生一致性算法的主要工具。<br>&emsp;&emsp;&emsp;&emsp;不幸的是，Paxos非常难于理解，尽管为了让它更通熟易懂做了无数的尝试。此外，Paxos的架构让它需要作出复杂的改变才能支持实用的系统。因此，系统集成商和学生都在和Paxos算法作斗争。<br>&emsp;&emsp;&emsp;&emsp;在我们和Paxos算法斗争之后，我们开始寻找一个新的一致性算法，新的算法可以为软件系统建设和教学提供一个更好的基础。我们的方法——主要目标是易于理解——是与众不同的：我们可以为实用系统定义一个一致性算法，并且这个算法比Paxos更容易学习？此外，我们希望该算法对系统建设者来说更为直观。不仅仅是让算法有效，并且让该算法有效看起来显而易见也很重要。<br>&emsp;&emsp;&emsp;&emsp;这个工作的成果就是被称为Raft的一致性算法。在设计Raft时，我们采用了特定的技术来提高可理解性，包括分解（Raft分离了leader选举，日志复制和安全性）和状态空间减少（相对于Paxos，Raft减少了不确定性程度和某个server会与其他server不一致的途径）。在两所大学共43名学生参与的用户研究表明，Raft比Paxos更容易理解：在学完两个两个算法后，其中33名学生在Raft算法上回答的比Paxos更好。<br>&emsp;&emsp;&emsp;&emsp;Raft在很多方面和已有的一致性算法很像，但是它有一些新颖的特点：</p>
+<ul>
+<li>strong leader: Raft比其他一致性算法使用更强形式的领导力。比如，日志入口只能从leader流向其他server。这简化了日志复制的管理并使Raft更容易理解。</li>
+<li>leader选举：Raft使用随机的定时器去选举leader。这在其他一致性算法都需要的心跳检测上增加了一点机制，但是快速且简单地解决了冲突。</li>
+<li>成员变化：Raft在变更集群中server集合成员时，使用了新的联合一致性方法，在过度期间两个不同配置的大多数成员有交集。这可以让集群在配置改变期间也可以继续正常操作。  </li>
+</ul>
+<p>&emsp;&emsp;&emsp;&emsp;我们认为Raft算法优于Paxos算法和其他共识算法，不论是作为教学还是作为实现的基础。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/11/11/raft-paper-translate-to-chinese/" data-id="civdhpefj0001bmn1aqz0vv4p" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Raft-翻译/">Raft 翻译</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/11/11/paxos-simple-translate-to-chinese/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Paxos simple论文翻译</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/translate/">translate</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Raft-翻译/">Raft 翻译</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paxos-翻译/">paxos 翻译</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Raft-翻译/" style="font-size: 10px;">Raft 翻译</a> <a href="/tags/paxos-翻译/" style="font-size: 10px;">paxos 翻译</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">November 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2016/11/11/raft-paper-translate-to-chinese/">Raft论文翻译</a>
+          </li>
+        
+          <li>
+            <a href="/2016/11/11/paxos-simple-translate-to-chinese/">Paxos simple论文翻译</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 George Deng<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
