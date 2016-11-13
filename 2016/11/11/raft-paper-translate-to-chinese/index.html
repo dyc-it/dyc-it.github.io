@@ -5,16 +5,16 @@
   
   <title>Raft论文翻译 | TRACING</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="简单翻译了一下Diego Ongaro和John Ousterhout的论文《In Search of an Understandable Consensus Algorithm(Extended Version)》原文地址">
+  <meta name="description" content="翻译了Diego Ongaro和John Ousterhout的论文《In Search of an Understandable Consensus Algorithm(Extended Version)》原文地址">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Raft论文翻译">
 <meta property="og:url" content="http://yoursite.com/2016/11/11/raft-paper-translate-to-chinese/index.html">
 <meta property="og:site_name" content="TRACING">
-<meta property="og:description" content="简单翻译了一下Diego Ongaro和John Ousterhout的论文《In Search of an Understandable Consensus Algorithm(Extended Version)》原文地址">
-<meta property="og:updated_time" content="2016-11-11T12:36:04.000Z">
+<meta property="og:description" content="翻译了Diego Ongaro和John Ousterhout的论文《In Search of an Understandable Consensus Algorithm(Extended Version)》原文地址">
+<meta property="og:updated_time" content="2016-11-13T04:25:42.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Raft论文翻译">
-<meta name="twitter:description" content="简单翻译了一下Diego Ongaro和John Ousterhout的论文《In Search of an Understandable Consensus Algorithm(Extended Version)》原文地址">
+<meta name="twitter:description" content="翻译了Diego Ongaro和John Ousterhout的论文《In Search of an Understandable Consensus Algorithm(Extended Version)》原文地址">
   
     <link rel="alternate" href="/atom.xml" title="TRACING" type="application/atom+xml">
   
@@ -89,17 +89,24 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>简单翻译了一下Diego Ongaro和John Ousterhout的论文《In Search of an Understandable Consensus Algorithm(Extended Version)》<br><a href="https://raft.github.io/raft.pdf" target="_blank" rel="external">原文地址</a></p>
+        <p>翻译了Diego Ongaro和John Ousterhout的论文《In Search of an Understandable Consensus Algorithm(Extended Version)》<a href="https://raft.github.io/raft.pdf" target="_blank" rel="external">原文地址</a></p>
 <a id="more"></a>
-<h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p>&emsp;&emsp;&emsp;&emsp;Raft是一种管理复制日志的一致性算法。Raft产生的结果和Paxos或者multi-Paxos是一样的，并且Raft和Paxos一样高效，但是Raft的结构和Paxos是不一样的；这样让Raft比Paxos更容易理解并且为构建使用系统提供了更好的基础。为了增强可理解性，Raft分离了一致性算法的关键要素，比如leader选举，日志复制和安全性，并强制强一致性来减少必须要被考虑的状态。用户的研究结果表明，对学生来说，Raft比Paxos更容易学习。Raft也包括改变集群成员的新机制：使用重叠大多数成员保证安全性。</p>
-<h1 id="1-介绍"><a href="#1-介绍" class="headerlink" title="1 介绍"></a>1 介绍</h1><p>&emsp;&emsp;&emsp;&emsp;一致性算法可以让一批机器作为一个相关的组，这样即使组里面有机器故障，但是整个组仍然能够对外提供服务。因为这样，一致性算法在构建一个可靠的大规模软件系统中扮演者关键角色。在过去十年中，Paxos算法在一致性算法的讨论中一直占主导地位。大多数一致性算法的实现都基于Paxos算法或者受其影响，并且Paxos已经作为教学生一致性算法的主要工具。<br>&emsp;&emsp;&emsp;&emsp;不幸的是，Paxos非常难于理解，尽管为了让它更通熟易懂做了无数的尝试。此外，Paxos的架构让它需要作出复杂的改变才能支持实用的系统。因此，系统集成商和学生都在和Paxos算法作斗争。<br>&emsp;&emsp;&emsp;&emsp;在我们和Paxos算法斗争之后，我们开始寻找一个新的一致性算法，新的算法可以为软件系统建设和教学提供一个更好的基础。我们的方法——主要目标是易于理解——是与众不同的：我们可以为实用系统定义一个一致性算法，并且这个算法比Paxos更容易学习？此外，我们希望该算法对系统建设者来说更为直观。不仅仅是让算法有效，并且让该算法有效看起来显而易见也很重要。<br>&emsp;&emsp;&emsp;&emsp;这个工作的成果就是被称为Raft的一致性算法。在设计Raft时，我们采用了特定的技术来提高可理解性，包括分解（Raft分离了leader选举，日志复制和安全性）和状态空间减少（相对于Paxos，Raft减少了不确定性程度和某个server会与其他server不一致的途径）。在两所大学共43名学生参与的用户研究表明，Raft比Paxos更容易理解：在学完两个两个算法后，其中33名学生在Raft算法上回答的比Paxos更好。<br>&emsp;&emsp;&emsp;&emsp;Raft在很多方面和已有的一致性算法很像，但是它有一些新颖的特点：</p>
+<h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p>&emsp;&emsp;Raft是一种管理复制日志的一致性算法。Raft产生的结果和Paxos或者multi-Paxos是一样的，并且Raft和Paxos一样高效，但是Raft的结构和Paxos是不一样的；这样让Raft比Paxos更容易理解并且为构建使用系统提供了更好的基础。为了增强可理解性，Raft分离了一致性算法的关键要素，比如leader选举，日志复制和安全性，并强制强一致性来减少必须要被考虑的状态。用户的研究结果表明，对学生来说，Raft比Paxos更容易学习。Raft也包括改变集群成员的新机制：使用重叠大多数成员保证安全性。</p>
+<h1 id="1-介绍"><a href="#1-介绍" class="headerlink" title="1 介绍"></a>1 介绍</h1><p>&emsp;&emsp;一致性算法可以让一批机器作为一个相关的组，这样即使组里面有机器故障，但是整个组仍然能够对外提供服务。因为这样，一致性算法在构建一个可靠的大规模软件系统中扮演者关键角色。在过去十年中，Paxos算法在一致性算法的讨论中一直占主导地位。大多数一致性算法的实现都基于Paxos算法或者受其影响，并且Paxos已经作为教学生一致性算法的主要工具。<br>&emsp;&emsp;不幸的是，Paxos非常难于理解，尽管为了让它更通熟易懂做了无数的尝试。此外，Paxos的架构让它需要作出复杂的改变才能支持实用的系统。因此，系统集成商和学生都在和Paxos算法作斗争。<br>&emsp;&emsp;在我们和Paxos算法斗争之后，我们开始寻找一个新的一致性算法，新的算法可以为软件系统建设和教学提供一个更好的基础。我们的方法——主要目标是易于理解——是与众不同的：我们可以为实用系统定义一个一致性算法，并且这个算法比Paxos更容易学习？此外，我们希望该算法对系统建设者来说更为直观。不仅仅是让算法有效，并且让该算法有效看起来显而易见也很重要。<br>&emsp;&emsp;这个工作的成果就是被称为Raft的一致性算法。在设计Raft时，我们采用了特定的技术来提高可理解性，包括分解（Raft分离了leader选举，日志复制和安全性）和状态空间减少（相对于Paxos，Raft减少了不确定性程度和某个server会与其他server不一致的途径）。在两所大学共43名学生参与的用户研究表明，Raft比Paxos更容易理解：在学完两个两个算法后，其中33名学生在Raft算法上回答的比Paxos更好。<br>&emsp;&emsp;Raft在很多方面和已有的一致性算法很像，但是它有一些新颖的特点：</p>
 <ul>
 <li>strong leader: Raft比其他一致性算法使用更强形式的领导力。比如，日志入口只能从leader流向其他server。这简化了日志复制的管理并使Raft更容易理解。</li>
 <li>leader选举：Raft使用随机的定时器去选举leader。这在其他一致性算法都需要的心跳检测上增加了一点机制，但是快速且简单地解决了冲突。</li>
 <li>成员变化：Raft在变更集群中server集合成员时，使用了新的联合一致性方法，在过度期间两个不同配置的大多数成员有交集。这可以让集群在配置改变期间也可以继续正常操作。  </li>
 </ul>
-<p>&emsp;&emsp;&emsp;&emsp;我们认为Raft算法优于Paxos算法和其他共识算法，不论是作为教学还是作为实现的基础。Raft算法比其他算法更简单并更容易理解；它被充分描述足以满足一个实际系统的需求；它有很多开源实现并且被很多公司使用；它的安全性已经被证实指定和证明；其效率也可以和其他算法相媲美。这篇论文剩下的部分介绍了复制状态机问题（第2部分），讨论了Paxos算法的优缺点（第3部分），描述了为了可理解性我们采用的一般方法（第4部分），展示了Raft一致性算法（第5到8部分），评估了Raft算法（第9部分），并且讨论了相关的工作（第10部分）。</p>
-<h1 id="2-复制状态机"><a href="#2-复制状态机" class="headerlink" title="2 复制状态机"></a>2 复制状态机</h1><p>&emsp;&emsp;&emsp;&emsp;一致性算法通常出现在复制状态机的情景中。在这个方法中，状态机在一批server上，计算相同状态的相同副本，即使某些server宕机了也可以继续操作。复制状态机在分布式系统中被用来解决很多容错问题。比如，只有一个leader的大规模系统，GFS，HDFS和RAMCloud，通常使用单独的复制状态机去管理leader选举和leader宕机时也必须可用的配置信息。复制状态机的例子包括Chubby和Zookeeper。<br>&emsp;&emsp;&emsp;&emsp;复制状态机通常使用复制日志的方式实现，像图1中的那样。每一个存储了一个包括一系列命令的日志，状态机按照顺序执行这些日志。每一个日志包含相同的命令，并且顺序也相同，所以每一个状态机执行相同的命令序列。因为状态机是确定性的，每一个计算相同的状态并有相同的输出序列。</p>
+<p>&emsp;&emsp;我们认为Raft算法优于Paxos算法和其他共识算法，不论是作为教学还是作为实现的基础。Raft算法比其他算法更简单并更容易理解；它被充分描述足以满足一个实际系统的需求；它有很多开源实现并且被很多公司使用；它的安全性已经被证实指定和证明；其效率也可以和其他算法相媲美。这篇论文剩下的部分介绍了复制状态机问题（第2部分），讨论了Paxos算法的优缺点（第3部分），描述了为了可理解性我们采用的一般方法（第4部分），展示了Raft一致性算法（第5到8部分），评估了Raft算法（第9部分），并且讨论了相关的工作（第10部分）。</p>
+<h1 id="2-复制状态机"><a href="#2-复制状态机" class="headerlink" title="2 复制状态机"></a>2 复制状态机</h1><p>&emsp;&emsp;一致性算法通常出现在复制状态机的情景中。在这个方法中，状态机在一批server上，计算相同状态的相同副本，即使某些server宕机了也可以继续操作。复制状态机在分布式系统中被用来解决很多容错问题。比如，只有一个leader的大规模系统，GFS，HDFS和RAMCloud，通常使用单独的复制状态机去管理leader选举和leader宕机时也必须可用的配置信息。复制状态机的例子包括Chubby和Zookeeper。<br>&emsp;&emsp;复制状态机通常使用复制日志的方式实现，像图1中的那样。每一个存储了一个包括一系列命令的日志，状态机按照顺序执行这些日志。每一个日志包含相同的命令，并且顺序也相同，所以每一个状态机执行相同的命令序列。因为状态机是确定性的，每一个计算相同的状态并有相同的输出序列。<br>&emsp;&emsp;一致性算法的工作是保持复制日志一致。server上的一致性模块从client接受命令，让后把命令加入到一致性模块的日志中。server上的一致性模块和其他server上的一致性模块通信，确保每一份日志最终都包含相同的请求，并且顺序是一样的，即使某些server故障了。一旦命令被正确地复制了，每一个server上的状态机使用日志中的顺序处理它们，然后输出被返回给client。结果是，所有的server看起来组成了一个单一的、高度可靠的状态机。<br>&emsp;&emsp;为实际系统设计的一致性算法通常具有下面的属性：</p>
+<ul>
+<li>在所有非拜占庭错误的情况下保证安全性（从来不会返回一个不正确的值），包括在网络延迟、分区、丢包、重复和重新排序的情况下都可以保证安全性</li>
+<li>只要大多数的server正常工作并且可以和其他server和client通信，那么算法是充分可用的。因此，通常有5个节点的集群可以容忍2个server失效。假设server是通过停止来模拟失效的；以后失效的server可以从永久存储上的状态恢复过来，然后重新加入集群。</li>
+<li>不依赖计时来保证日志的一致性：时钟错误和极端的消息延时在最坏的情况下会导致可用性问题</li>
+<li>在通常情况下，集群中的大多数节点响应了一轮远程过程调用后，一条命令就执行完了；少部分慢的server不需要影响整体系统性能。</li>
+</ul>
+<h1 id="3-Paxos的问题"><a href="#3-Paxos的问题" class="headerlink" title="3 Paxos的问题"></a>3 Paxos的问题</h1><p>&emsp;&emsp;在过去十年，Leslie Lamport的Paxos协议几乎成了一致性算法的代名词：这是在课堂上被教的最多的协议，并且大多数一致性算法的实现都使用Paxos作为起点。Paxos首先定义了一个能够在单个决策达成一致的协议，例如单个复制日志条目。我们将这个子集称为单一法令Paxos。然后Paxos组合这个协议的多个实例以促进一些列决策，比如日志（multi-Paxos）。Paxos确保安全性和liveness，并且它支持集群成员的改变。Paxos的正确性已经被证明，并且在一般情况下是高效的。<br>&emsp;&emsp;不幸的是，Paxos有两个明显的缺点。第一个，Paxos是非常难以理解的。完整的解释是臭名昭著的不透明；很少有人能够理解，并且必须付出巨大的努力。结果，有很多尝试使用更简单的术语解释Paxos。这些解释集中在单一法令子集，即使这样也是充满挑战。在对NSDI 2012与会者做的非正式调查中，我们发现很少有人喜欢Paxos，即使是经验丰富的研究人员。我们自己与Paxos斗争；直到我们阅读了很多简单的解释并设计了我们自己的可选协议后，我们才能理解完整的Paxos算法，这个过程花了我们将近一年的时间。<br>&emsp;&emsp;我们假设Paxos的不透明来源于：Paxos选择了单一法令子集作为它的基础。单一法令Paxos是密集和微妙的：它被分为两个阶段，对这两个阶段没有直观的解释并且不能被独立理解。因此，对于单一法令协议为什么能够工作很难有直观的看法。multi-Paxos的组合规则明显增加了复杂性。我们认为，就多项决定达成共识的总体问题（比如，日志而不是日志项）可以被分解为更直接和明显的方式。<br>&emsp;&emsp;Paxos的第二个问题是不能为构建一个实用的实现提供一个好的基础。一个原因是在multi-Paxos上没有达成广泛的共识。Lamport的描述大多数是关于single-decree Paxos的，他描绘了multi-Paxos的多种方法，但是很多细节都缺失。已经有很多尝试去丰富和优化Paxos，但是这些尝试都不一样并且和Lamport的描绘也不太一样。比如像Chubby这样的系统实现了类Paxos算法，但是在大多数情况下，它们的细节并没有公布。</p>
 <h1 id="TODO"><a href="#TODO" class="headerlink" title="TODO"></a>TODO</h1><ul>
 <li>这篇论文是extended版本，第一版也需要看。</li>
 </ul>
@@ -107,25 +114,16 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/11/11/raft-paper-translate-to-chinese/" data-id="civdhpefj0001bmn1aqz0vv4p" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/11/11/raft-paper-translate-to-chinese/" data-id="civg4fn3i0000pbn16s7erjwr" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Raft-翻译/">Raft 翻译</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Raft/">Raft</a></li></ul>
 
     </footer>
   </div>
   
     
 <nav id="article-nav">
-  
-    <a href="/2016/11/11/README/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          (no title)
-        
-      </div>
-    </a>
   
   
     <a href="/2016/11/11/paxos-simple-translate-to-chinese/" id="article-nav-older" class="article-nav-link-wrap">
@@ -156,7 +154,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Raft-翻译/">Raft 翻译</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paxos-翻译/">paxos 翻译</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Raft/">Raft</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paxos/">paxos</a></li></ul>
     </div>
   </div>
 
@@ -166,7 +164,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Raft-翻译/" style="font-size: 10px;">Raft 翻译</a> <a href="/tags/paxos-翻译/" style="font-size: 10px;">paxos 翻译</a>
+      <a href="/tags/Raft/" style="font-size: 10px;">Raft</a> <a href="/tags/paxos/" style="font-size: 10px;">paxos</a>
     </div>
   </div>
 
@@ -186,10 +184,6 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
-        
-          <li>
-            <a href="/2016/11/11/README/">(no title)</a>
-          </li>
         
           <li>
             <a href="/2016/11/11/raft-paper-translate-to-chinese/">Raft论文翻译</a>
