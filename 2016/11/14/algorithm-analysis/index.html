@@ -3,14 +3,18 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Tag: paxos | TRACING</title>
+  <title>算法分析 | TRACING</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="TRACING">
-<meta property="og:url" content="http://yoursite.com/tags/paxos/index.html">
+  <meta name="description" content="算法的时间复杂度和空间复杂度分析">
+<meta property="og:type" content="article">
+<meta property="og:title" content="算法分析">
+<meta property="og:url" content="http://yoursite.com/2016/11/14/algorithm-analysis/index.html">
 <meta property="og:site_name" content="TRACING">
+<meta property="og:description" content="算法的时间复杂度和空间复杂度分析">
+<meta property="og:updated_time" content="2016-11-14T08:23:28.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="TRACING">
+<meta name="twitter:title" content="算法分析">
+<meta name="twitter:description" content="算法的时间复杂度和空间复杂度分析">
   
     <link rel="alternate" href="/atom.xml" title="TRACING" type="application/atom+xml">
   
@@ -59,39 +63,85 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2016" class="archive-year">2016</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2016/11/11/paxos-simple-translate-to-chinese/" class="archive-article-date">
-  <time datetime="2016-11-11T06:27:52.000Z" itemprop="datePublished">Nov 11</time>
+        <section id="main"><article id="post-algorithm-analysis" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/11/14/algorithm-analysis/" class="article-date">
+  <time datetime="2016-11-14T07:26:14.000Z" itemprop="datePublished">2016-11-14</time>
 </a>
-      
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/algorithm/">algorithm</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/11/11/paxos-simple-translate-to-chinese/">Paxos simple论文翻译</a>
+    <h1 class="article-title" itemprop="name">
+      算法分析
     </h1>
   
 
-    </header>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>算法的时间复杂度和空间复杂度分析</p>
+<a id="more"></a>
+<h1 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h1><p>算法的时间复杂度是以基本语句执行次数的数量级来衡量的。</p>
+<h2 id="渐进记号"><a href="#渐进记号" class="headerlink" title="渐进记号"></a>渐进记号</h2><ul>
+<li>大O<br>渐进上界，关注最坏情况下的复杂度</li>
+<li>大Ω<br>渐进下界</li>
+<li>大Θ<br>渐进确界</li>
+</ul>
+<h2 id="计算步骤"><a href="#计算步骤" class="headerlink" title="计算步骤"></a>计算步骤</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">def increase_number(n):</div><div class="line">    inc = 0</div><div class="line">    for i in xrange(1, n):</div><div class="line">        inc += 1</div><div class="line">        for j in xrange(1, n):</div><div class="line">            inc += 2</div></pre></td></tr></table></figure>
+<ul>
+<li><ol>
+<li>找出算法中的基本语句<br>算法中执行次数最多的那条语句就是基本语句，通常是最内层循环的循环体。比如上面代码中的”inc += 2” </li>
+</ol>
+</li>
+<li><ol>
+<li>计算基本语句执行次数的数量级<br>基本执行次数表示为一个函数，然后去掉常熟系数和低次幂，比如表示为n<sup>2</sup></li>
+</ol>
+</li>
+<li><ol>
+<li>用大O记号表示算法的时间复杂度<br>将基本执行次数的数量级放入大O标记中，上面算法的时间复杂度可以表示为O(n<sup>2</sup>)</li>
+</ol>
+</li>
+</ul>
+<h2 id="常见时间复杂度"><a href="#常见时间复杂度" class="headerlink" title="常见时间复杂度"></a>常见时间复杂度</h2><p>Ο(1)＜Ο(log<sub>2</sub>n)＜Ο(n)＜Ο(nlog<sub>2</sub>n)＜Ο(n<sup>2</sup>)＜Ο(n<sup>3</sup>)＜…＜Ο(2<sup>n</sup>)＜Ο(n!)  </p>
+<ul>
+<li>P类问题（Polynomial）<br>Ο(1)、Ο(log<sub>2</sub>n)、Ο(n)、Ο(nlog<sub>2</sub>n)、Ο(n<sup>2</sup>)、Ο(n<sup>3</sup>)等称为多项式时间，被计算机科学家归类为P类问题</li>
+<li>NP类问题（Non-deterministic Polynomial）<br>Ο(2<sup>n</sup>)、Ο(n!)称为指数时间，被计算机科学家归类为NP问题</li>
+</ul>
+<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/11/14/algorithm-analysis/" data-id="civht0jz4000583n104gr1vsa" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/algorithm/">algorithm</a></li></ul>
+
+    </footer>
   </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/11/14/TODO/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">TODO</div>
+    </a>
+  
+</nav>
+
+  
 </article>
-  
-  
-    </div></section>
-  
 
 </section>
         
