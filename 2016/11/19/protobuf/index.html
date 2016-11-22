@@ -3,14 +3,18 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Tag: paxos | TRACING</title>
+  <title>protobuf | TRACING</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="TRACING">
-<meta property="og:url" content="http://yoursite.com/tags/paxos/index.html">
+  <meta name="description" content="Google Protocol Buffers的使用。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="protobuf">
+<meta property="og:url" content="http://yoursite.com/2016/11/19/protobuf/index.html">
 <meta property="og:site_name" content="TRACING">
+<meta property="og:description" content="Google Protocol Buffers的使用。">
+<meta property="og:updated_time" content="2016-11-21T02:31:04.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="TRACING">
+<meta name="twitter:title" content="protobuf">
+<meta name="twitter:description" content="Google Protocol Buffers的使用。">
   
     <link rel="alternate" href="/atom.xml" title="TRACING" type="application/atom+xml">
   
@@ -59,39 +63,67 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2016" class="archive-year">2016</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2016/11/11/paxos-simple-translate-to-chinese/" class="archive-article-date">
-  <time datetime="2016-11-11T06:27:52.000Z" itemprop="datePublished">Nov 11</time>
+        <section id="main"><article id="post-protobuf" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/11/19/protobuf/" class="article-date">
+  <time datetime="2016-11-19T06:53:03.000Z" itemprop="datePublished">2016-11-19</time>
 </a>
-      
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/lib/">lib</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/11/11/paxos-simple-translate-to-chinese/">Paxos simple论文翻译</a>
+    <h1 class="article-title" itemprop="name">
+      protobuf
     </h1>
   
 
-    </header>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a href="https://developers.google.com/protocol-buffers/" target="_blank" rel="external">Google Protocol Buffers</a>的使用。</p>
+<a id="more"></a>
+<h1 id="1-简介"><a href="#1-简介" class="headerlink" title="1 简介"></a>1 简介</h1><p>&emsp;&emsp;<a href="https://developers.google.com/protocol-buffers/" target="_blank" rel="external">Protocol Buffers</a>（简称Protobuf）是Google为序列化格式化的数据开发的语言中立、平台中立并且可扩展的数据交换格式，这让我们想起了XML，但是protobuf更小、更快且更为简单。Protobuf可以用在通信协议和数据存储中。<br>&emsp;&emsp;截止2016年11月，支持C++、C#、GO、JAVA、PTYHON共五种语言。<br><a href="https://github.com/google/protobuf" target="_blank" rel="external">github地址</a></p>
+<h1 id="1-1-安装"><a href="#1-1-安装" class="headerlink" title="1.1 安装"></a>1.1 安装</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"># on CentOS</div><div class="line">yum install protobuf protobuf-compiler</div><div class="line"></div><div class="line"># on OS X</div><div class="line">brew install protobuf</div><div class="line">sudo pip install protobuf</div></pre></td></tr></table></figure>
+<h1 id="1-2-特点"><a href="#1-2-特点" class="headerlink" title="1.2 特点"></a>1.2 特点</h1><p>使用二进制存储数据<br>消息体积比XML小<br>解析速度比XML快  </p>
+<h1 id="2-原理"><a href="#2-原理" class="headerlink" title="2 原理"></a>2 原理</h1><h1 id="3-使用"><a href="#3-使用" class="headerlink" title="3 使用"></a>3 使用</h1><h2 id="3-1-Python"><a href="#3-1-Python" class="headerlink" title="3.1 Python"></a>3.1 Python</h2><ol>
+<li>使用.proto文件定义消息格式</li>
+<li>使用protobuf compiler</li>
+<li>使用Python的protobuf API读写消息</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/11/19/protobuf/" data-id="civov1pbm000ft2n1gbrvjuk4" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lib/">lib</a></li></ul>
+
+    </footer>
   </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/11/19/raft-logcabin/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">raft-logcabin</div>
+    </a>
+  
+</nav>
+
+  
 </article>
-  
-  
-    </div></section>
-  
 
 </section>
         
