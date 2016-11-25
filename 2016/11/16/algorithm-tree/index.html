@@ -11,7 +11,7 @@
 <meta property="og:url" content="http://yoursite.com/2016/11/16/algorithm-tree/index.html">
 <meta property="og:site_name" content="TRACING">
 <meta property="og:description" content="树相关算法">
-<meta property="og:updated_time" content="2016-11-24T11:23:23.000Z">
+<meta property="og:updated_time" content="2016-11-25T07:00:38.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据结构——树">
 <meta name="twitter:description" content="树相关算法">
@@ -54,7 +54,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Søk"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
@@ -91,11 +91,18 @@
       
         <p>树相关算法</p>
 <a id="more"></a>
-<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><h2 id="二叉树"><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h2><ul>
+<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><h2 id="树"><a href="#树" class="headerlink" title="树"></a>树</h2><ul>
+<li>结点的度——一个结点拥有的子树的个数称为结点的度。</li>
+<li>树的度——一颗树中,度最大的结点的度称为树的度。</li>
+<li>树（所有类型的树）的总结点数 = 总度数 + 1。度可以理解为树中路径或者边的个数，由于在树中除了根结点，其他结点都有唯一一条路径指向它；所以，总度数+1=总结点数。</li>
+<li>叶结点或终端结点——度为0的结点。</li>
+<li>非终端节点或分支节点——度不为0的结点。</li>
+<li>森林——由多棵互不相交的树的集合称为森林。</li>
+</ul>
+<h2 id="二叉树"><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h2><ul>
 <li>第i层的结点总数不超过2<sup>i-1</sup></li>
 <li>深度为h（根结点深度为1）的二叉树最少有h个结点,最多有2<sup>h</sup>-1个结点</li>
 <li>深度为h（根结点深度为1）的满二叉树有2<sup>h</sup>-1个结点</li>
-<li>树（所有类型的树）的总结点数 = 总度数 + 1。度可以理解为树中路径或者边的个数，由于在树中除了根结点，其他结点都有唯一一条路径指向它；所以，总度数+1=总结点数。</li>
 <li>对于任意一颗二叉树,度为0的结点(叶子结点)数为N<sub>0</sub>,度为2的结点的个数为N<sub>2</sub>,则N<sub>0</sub> = N<sub>2</sub> + 1。  </li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">证明：</div><div class="line">设总度数为k，N0为度为0的结点数，N1为度为1的结点数，N2为度为2的结点数。</div><div class="line">易知：总度数 k = 2*N2 + N1</div><div class="line">总结点数 k+1 = N2 + N1 + N0，由上面两个方程消掉k和N1：</div><div class="line">N2+1 = N0</div></pre></td></tr></table></figure>
@@ -206,7 +213,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Kategorier</h3>
+    <h3 class="widget-title">Categories</h3>
     <div class="widget">
       <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/algorithm/">algorithm</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/distributed-system/">distributed-system</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lib/">lib</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/network/">network</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/tools/">tools</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/translate/">translate</a></li></ul>
     </div>
@@ -235,7 +242,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Arkiv</h3>
+    <h3 class="widget-title">Archives</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">November 2016</a></li></ul>
     </div>
@@ -245,7 +252,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Siste innlegg</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
         
