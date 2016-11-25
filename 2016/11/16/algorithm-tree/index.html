@@ -3,17 +3,17 @@
 <head>
   <meta charset="utf-8">
   
-  <title>algorithm-tree | TRACING</title>
+  <title>数据结构——树 | TRACING</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="树相关算法">
 <meta property="og:type" content="article">
-<meta property="og:title" content="algorithm-tree">
+<meta property="og:title" content="数据结构——树">
 <meta property="og:url" content="http://yoursite.com/2016/11/16/algorithm-tree/index.html">
 <meta property="og:site_name" content="TRACING">
 <meta property="og:description" content="树相关算法">
-<meta property="og:updated_time" content="2016-11-22T06:14:25.000Z">
+<meta property="og:updated_time" content="2016-11-24T11:23:23.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="algorithm-tree">
+<meta name="twitter:title" content="数据结构——树">
 <meta name="twitter:description" content="树相关算法">
   
     <link rel="alternate" href="/atom.xml" title="TRACING" type="application/atom+xml">
@@ -54,7 +54,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Søk"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
@@ -81,7 +81,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      algorithm-tree
+      数据结构——树
     </h1>
   
 
@@ -108,6 +108,10 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">证明：</div><div class="line">设结点总数为n，N0为度为0的结点数，N1为度为1的结点数，N2为度为2的结点数。</div><div class="line">易知：总结点数 n = N2 + N1 + N0</div><div class="line">由上面的证明可知:N0=N2+1，由上面两个方程消掉N2：</div><div class="line">N0 = (n-N1+1)/2。</div><div class="line">在完全二叉树中N1的取值要么是0要么是1。</div><div class="line">所以，如果n为奇数，那么N1=0，N0=(n+1)/2=ceiling(n/2)；</div><div class="line">如果n为偶数，那么N1=1，N0=n/2=ceiling(n/2)</div><div class="line">综上，叶子结点数N0=ceiling(n/2)</div></pre></td></tr></table></figure>
 <ul>
 <li>结点的平衡因子定义为：该结点左子树的高度-该结点右子树的高度。如果树中每个结点的平衡因子的取值在集合{-1, 0, 1}内，该树就是平衡树。</li>
+<li>路径及其长度——在一棵树中，从一个结点往下可以达到的孩子或者孙子之间的通路，称为路径。通路中分支的数目称为路径长度。如果根结点的层数为1，则根结点到第L层的路径长度为L-1.</li>
+<li>结点的带权路径长度——如果给树中的结点赋予一个权重，结点的“带权路径长度”为：从根结点到该结点之间的路径长度与该结点权重的乘积。</li>
+<li>树的带权路径长度——所有叶子结点的带权路径长度之和，即使WPL（Weight Path Length）。</li>
+<li>最优二叉树/哈夫曼树（Huffman Tree）——带权路径最小的树。（权值较大的结点离根结点近）</li>
 </ul>
 <h3 id="完全二叉树"><a href="#完全二叉树" class="headerlink" title="完全二叉树"></a>完全二叉树</h3><p>Complete Binary Tree:只有最下面的两层结点度能够小于2,并且最下面一层的结点都集中在该层最左边。</p>
 <h3 id="满二叉树"><a href="#满二叉树" class="headerlink" title="满二叉树"></a>满二叉树</h3><p>Full Binary Tree:除最后一层无任何子结点,每一层上的所有结点都有两个子结点。满二叉树是完全二叉树的特例。</p>
@@ -119,10 +123,11 @@
 <li>没有键值相等的结点。</li>
 </ol>
 <p>二叉查找树的优势在于：查找、插入的时间复杂度较低，为O(logn)。<br>二叉查找树的中序遍历输出的是递增的序列。</p>
-<h3 id="平衡树"><a href="#平衡树" class="headerlink" title="平衡树"></a>平衡树</h3><p>当且仅当两个子树的高度差不超过1时，这个数是平衡二叉树。也叫AVL树<br>它的左子树和右子树都是平衡二叉树。</p>
+<h3 id="Huffman树"><a href="#Huffman树" class="headerlink" title="Huffman树"></a><a href="https://zh.wikipedia.org/wiki/%E9%9C%8D%E5%A4%AB%E6%9B%BC%E7%BC%96%E7%A0%81" target="_blank" rel="external">Huffman树</a></h3><p>带权路径最小的树。<br>二叉Huffman树中只有度为0和2的结点,所有如果Huffman树叶子结点右n0个,那么Huffman树总结点数为2*n0-1</p>
+<h3 id="平衡树"><a href="#平衡树" class="headerlink" title="平衡树"></a>平衡树</h3><p>当且仅当两个子树的高度差不超过1时，这个树是平衡二叉树。也叫AVL树<br>它的左子树和右子树都是平衡二叉树。</p>
 <h3 id="红黑树"><a href="#红黑树" class="headerlink" title="红黑树"></a>红黑树</h3><p>红黑树是一种自平衡二叉查找树。典型的用途是实现关联数组。</p>
 <h3 id="决策树"><a href="#决策树" class="headerlink" title="决策树"></a>决策树</h3><p>决策树又称判定树</p>
-<h3 id="回归树"><a href="#回归树" class="headerlink" title="回归树"></a>回归树</h3><h3 id="kd树"><a href="#kd树" class="headerlink" title="kd树"></a>kd树</h3><h3 id="Huffman树"><a href="#Huffman树" class="headerlink" title="Huffman树"></a>Huffman树</h3><h1 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h1><h2 id="遍历"><a href="#遍历" class="headerlink" title="遍历"></a>遍历</h2><ol>
+<h3 id="回归树"><a href="#回归树" class="headerlink" title="回归树"></a>回归树</h3><h3 id="kd树"><a href="#kd树" class="headerlink" title="kd树"></a>kd树</h3><h1 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h1><h2 id="遍历"><a href="#遍历" class="headerlink" title="遍历"></a>遍历</h2><ol>
 <li>树一共有4种遍历方式：前序遍历、中序遍历、后序遍历和层次遍历</li>
 <li>由于前序遍历第一个访问的是根结点,所以前序遍历的第一个输出是根结点</li>
 <li>由于后序遍历最后一个访问的是根结点,所以后序遍历的最后一个输出是根结点</li>
@@ -164,10 +169,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/11/16/algorithm-tree/" data-id="civov1pbe000at2n16s9x435q" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/11/16/algorithm-tree/" data-id="civx8g9yv000a05n1yd3hpydz" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/algorithm/">algorithm</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tree/">tree</a></li></ul>
 
     </footer>
   </div>
@@ -201,9 +206,9 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Categories</h3>
+    <h3 class="widget-title">Kategorier</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/algorithm/">algorithm</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/distributed-system/">distributed-system</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lib/">lib</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/tools/">tools</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/translate/">translate</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/algorithm/">algorithm</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/distributed-system/">distributed-system</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lib/">lib</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/network/">network</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/tools/">tools</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/translate/">translate</a></li></ul>
     </div>
   </div>
 
@@ -213,7 +218,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Raft/">Raft</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithm/">algorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lib/">lib</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paxos/">paxos</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/raft-logcabin/">raft logcabin</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tools/">tools</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Raft/">Raft</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithm/">algorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dns-protocol/">dns protocol</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lib/">lib</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paxos/">paxos</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/queue/">queue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/raft-logcabin/">raft logcabin</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sphinx/">sphinx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tools/">tools</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tree/">tree</a></li></ul>
     </div>
   </div>
 
@@ -223,14 +228,14 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Raft/" style="font-size: 10px;">Raft</a> <a href="/tags/algorithm/" style="font-size: 20px;">algorithm</a> <a href="/tags/lib/" style="font-size: 10px;">lib</a> <a href="/tags/paxos/" style="font-size: 10px;">paxos</a> <a href="/tags/raft-logcabin/" style="font-size: 10px;">raft logcabin</a> <a href="/tags/tools/" style="font-size: 10px;">tools</a>
+      <a href="/tags/Raft/" style="font-size: 10px;">Raft</a> <a href="/tags/algorithm/" style="font-size: 20px;">algorithm</a> <a href="/tags/dns-protocol/" style="font-size: 10px;">dns protocol</a> <a href="/tags/lib/" style="font-size: 10px;">lib</a> <a href="/tags/paxos/" style="font-size: 10px;">paxos</a> <a href="/tags/queue/" style="font-size: 10px;">queue</a> <a href="/tags/raft-logcabin/" style="font-size: 10px;">raft logcabin</a> <a href="/tags/sphinx/" style="font-size: 20px;">sphinx</a> <a href="/tags/tools/" style="font-size: 10px;">tools</a> <a href="/tags/tree/" style="font-size: 10px;">tree</a>
     </div>
   </div>
 
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
+    <h3 class="widget-title">Arkiv</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">November 2016</a></li></ul>
     </div>
@@ -240,28 +245,28 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">Siste innlegg</h3>
     <div class="widget">
       <ul>
         
           <li>
+            <a href="/2016/11/24/queue/">数据结构——队列</a>
+          </li>
+        
+          <li>
+            <a href="/2016/11/24/dns/">dns</a>
+          </li>
+        
+          <li>
+            <a href="/2016/11/24/python-package/">python包相关工具</a>
+          </li>
+        
+          <li>
+            <a href="/2016/11/24/sphinx/">sphinx介绍及使用</a>
+          </li>
+        
+          <li>
             <a href="/2016/11/19/protobuf/">protobuf</a>
-          </li>
-        
-          <li>
-            <a href="/2016/11/19/raft-logcabin/">raft-logcabin</a>
-          </li>
-        
-          <li>
-            <a href="/2016/11/16/algorithm-tree/">algorithm-tree</a>
-          </li>
-        
-          <li>
-            <a href="/2016/11/15/network-tools/">网络工具</a>
-          </li>
-        
-          <li>
-            <a href="/2016/11/15/dynamic-programming/">动态规划</a>
           </li>
         
       </ul>
